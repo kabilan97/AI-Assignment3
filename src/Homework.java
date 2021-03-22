@@ -171,6 +171,6 @@ public class Homework {
 	}
 	
 	public static void main(String[] args) {
-		task0();
+		task1();
 	}
 }
