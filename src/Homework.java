@@ -1,4 +1,10 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -29,35 +35,35 @@ public class Homework {
 	}
 	
 	// Solve unconstrained problem for 1 agent with value iteration
-	public static void task1() {		
-		// Get CMDP model for 1 agent
-		CMDP cmdp = UserGenerator.getCMDPChild();
-		CMDP[] cmdps = new CMDP[]{cmdp};
-		
-		// Solve the problem without constraints
-		PlanningAlgorithm alg = new PlanningAlgorithm();		
-		Solution solution = alg.solveVI(cmdps, 0.95);
-		System.out.println("Expected reward: "+solution.getExpectedReward());
-		System.out.println("Expected cost: "+solution.getExpectedCost());
-		
-		// Simulate solution
-		System.out.println();
-		Simulator sim = new Simulator(rnd);
-		sim.simulate(cmdps, solution, 1000);
-		
-		// Print policy of agent 0
-		int agentID = 0;
-		double[][] policy = solution.getPolicy(agentID);
-		System.out.println();
-		for(int s=0; s<cmdps[agentID].getNumStates(); s++) {
-			System.out.print("State "+s+": ");
-			for(int a=0; a<cmdps[agentID].getNumActions(); a++) {
-				System.out.print(policy[s][a]+" ");
-			}
-			System.out.println();
-		}
-		
-	}
+    public static Solution task1(double discountFactor) {
+        // Get CMDP model for 1 agent
+        CMDP cmdp = UserGenerator.getCMDPChild();
+        CMDP[] cmdps = new CMDP[]{cmdp};
+
+        // Solve the problem without constraints
+        PlanningAlgorithm alg = new PlanningAlgorithm();
+        Solution solution = alg.solveVI(cmdps, discountFactor);
+        System.out.println("Expected reward: " + solution.getExpectedReward());
+        System.out.println("Expected cost: " + solution.getExpectedCost());
+
+        // Simulate solution
+        System.out.println();
+        Simulator sim = new Simulator(rnd);
+        sim.simulate(cmdps, solution, 1000);
+
+        // Print policy of agent 0
+        int agentID = 0;
+        double[][] policy = solution.getPolicy(agentID);
+        System.out.println();
+        for (int s = 0; s < cmdps[agentID].getNumStates(); s++) {
+            System.out.print("State " + s + ": ");
+            for (int a = 0; a < cmdps[agentID].getNumActions(); a++) {
+                System.out.print(policy[s][a] + " ");
+            }
+            System.out.println();
+        }
+        return solution;
+    }
 	
 	// Solve unconstrained problem for 1 agent with cost
 	public static void task2() {		
@@ -78,12 +84,12 @@ public class Homework {
 		Solution solution = alg.solveUnconstrained(cmdps);
 		System.out.println("Expected reward: "+solution.getExpectedReward());
 		System.out.println("Expected cost: "+solution.getExpectedCost());
-		
+
 		// Simulate solution
 		System.out.println();
 		Simulator sim = new Simulator(rnd);
 		sim.simulate(cmdps, solution, 1000);
-		
+
 		// Print policy of agent 0
 		int agentID = 0;
 		double[][] policy = solution.getPolicy(agentID);
@@ -95,11 +101,11 @@ public class Homework {
 			}
 			System.out.println();
 		}
-		
+
 	}
-	
+
 	// Solve constrained problem for 1 agent
-	public static void task3() {		
+	public static void task3() {
 		// Get CMDP model for 1 agent
 		CMDP cmdp = UserGenerator.getCMDPChild();
 		CMDP[] cmdps = new CMDP[]{cmdp};
