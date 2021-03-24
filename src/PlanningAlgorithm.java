@@ -182,8 +182,8 @@ public class PlanningAlgorithm {
 
         double delta = 0;
         double thresh = .05;
-        double[] best_actions = new double[cmdp.getNumStates()];
-        do{
+        int[] best_actions = new int[cmdp.getNumStates()];
+        do {
             delta = 0;
             for (int s = 0; s < cmdp.getNumStates(); s++) {
                 double v_tmp = 0;
@@ -207,6 +207,10 @@ public class PlanningAlgorithm {
         double[][] policy = new double[cmdp.getNumStates()][cmdp.getNumActions()];
 
         // TODO fill the policy array with probabilities
+        for (int s = 0; s < cmdp.getNumStates(); s++) {
+            int a = best_actions[s];
+            policy[s][a] = 1;
+        }
 
         ArrayList<double[][]> policies = new ArrayList<double[][]>();
         policies.add(policy);
