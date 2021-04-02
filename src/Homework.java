@@ -257,6 +257,7 @@ public class Homework {
 //            }
 //        }
 
+        task1(0.95);
         task4();
     }
 }
