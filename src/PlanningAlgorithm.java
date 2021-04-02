@@ -178,7 +178,7 @@ public class PlanningAlgorithm {
 
         double[] V = new double[cmdp.getNumStates()];
 
-        // TODO compute an optimal value function for the cmdp object
+        // compute an optimal value function for the cmdp object
 
         double delta = 0;
         double thresh = .05;

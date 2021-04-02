@@ -5,7 +5,10 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 18b998ec-8db5-11eb-2ccc-c3c76268ca1d
-using Plots
+begin
+	using Plots
+	using LinearAlgebra
+end
 
 # ╔═╡ 1ebcccdc-8db5-11eb-3b90-c506fb4e319e
 begin
@@ -20,51 +23,140 @@ discount_factors = map(x -> x[1], discount_fac_exp)
 # ╔═╡ 75a90448-8db5-11eb-1305-2b8a0a227a57
 rewards = map(y -> y[2], discount_fac_exp)
 
-# ╔═╡ 85203374-8db5-11eb-1838-934229976d52
-p = plot(discount_factors, rewards, label="Rewards", lw=3)
-
-# ╔═╡ d385eca2-8db5-11eb-39ea-bb24d60ea741
-begin
-	xlabel!("Discount factor")
-	ylabel!("Reward")
-	title!("Expected Reward vs Discount factor")
-end
-
-# ╔═╡ 400278c8-8db6-11eb-3a7e-692ae5a8eca5
-savefig(p, "task1.png")
-
 # ╔═╡ ddf5ab28-8e73-11eb-3409-afdf35e4ff45
-LinRange(0, 4, 15)
-
-# ╔═╡ 27310094-8e74-11eb-3648-ed288fd414ec
-values = [(0.125, 338.0), (0.25, 243.0), (0.5, 247.0), (1.0, 241.0), (2.0, 255.0), (4.0, 312.0), (8.0, 241.0), (0.125, 1350.0), (0.25, 1308.0), (0.5, 1379.0), (1.0, 1325.0), (2.0, 1242.0), (4.0, 1365.0), (8.0, 1298.0), (0.125, 3603.0), (0.25, 3467.0), (0.5, 3508.0), (1.0, 3530.0), (2.0, 3496.0), (4.0, 3416.0), (8.0, 3436.0), (0.125, 7046.0), (0.25, 7002.0), (0.5, 6979.0), (1.0, 6948.0), (2.0, 6877.0), (4.0, 7138.0), (8.0, 6908.0), (0.125, 12163.0), (0.25, 12159.0), (0.5, 12211.0), (1.0, 12105.0), (2.0, 12165.0), (4.0, 13230.0), (8.0, 13503.0)]
-
-# ╔═╡ 72b1d2f2-8e77-11eb-0924-ffc7329b8970
 begin
-	user_10= values[1:7]
-	user_20= values[8:14]
-	user_30= values[15:21]
-	user_40= values[22:28]
-	user_50= values[29:35]
+	discount_fac_exp_adults = [
+(0.0, 0.0), (0.81632653, 26.131222121705093), (0.26530612, 0.03896481286850602), (0.20408163, 0.011259024318650904), (0.46938776, 0.6794284344996729), (0.6122449, 3.198677286687851), (0.71428571, 9.057104954610903), (0.85714286, 40.63191420482782), (0.91836735, 81.45756383736807), (0.24489796, 0.027059555628210812), (0.83673469, 32.53957565540262), (0.95918367, 133.37809251922306), (0.18367347, 0.007113264837199293), (0.2244898, 0.018281169270041992), (0.10204082, 5.846354704487916E-4), (0.48979592, 0.8621030744746576), (0.36734694, 0.1904612923937549), (0.16326531, 0.004277729734982887), (0.93877551, 103.87725950514667), (0.97959184, 172.59520649105698), (0.73469388, 11.161266115181146), (0.63265306, 3.9522226568231), (0.53061224, 1.3494050673116826), (0.14285714, 0.0024163020653807403), (0.30612245, 0.0776993481304504), (0.42857143, 0.4198599297288797), (0.02040816, 0.0), (0.67346939, 5.988127907453493), (0.7755102, 17.000678382594362), (0.79591837, 21.036908423470063), (0.34693878, 0.1414360115718892), (0.40816327, 0.3234244309440593), (0.65306122, 4.85835519262177), (0.59183673, 2.594096370134368), (0.44897959, 0.536012537711144), (0.55102041, 1.6865840418217695), (0.04081633, 0.0), (0.32653061, 0.10562772138201074), (0.75510204, 13.76544172790416), (0.89795918, 64.26858347534306), (0.87755102, 50.98165032057873), (0.69387755, 7.374639475298496), (0.06122449, 0.0), (0.57142857, 2.090051879070502), (1.0, 225.23390030727478), (0.28571429, 0.05481006451137198), (0.3877551, 0.2494705517225124), (0.12244898, 0.0012572345336223532), (0.51020408, 1.081242968591726), (0.08163265, 0.0), ]
+	discount_fac_exp_adults = sort(discount_fac_exp_adults, by=first)
+end
+	
+
+# ╔═╡ 33195372-8ee0-11eb-1df4-b36ac35ba443
+df_adults = map(x -> x[1], discount_fac_exp_adults)
+
+# ╔═╡ 42b6ebbe-8ee0-11eb-2de0-a10da3fe5e30
+rewards_adults = map(x -> x[2], discount_fac_exp_adults)
+
+# ╔═╡ 61946106-8ee0-11eb-30b8-f7f84b884bf8
+begin
+	a = plot(df_adults,
+		rewards_adults,
+		label="Rewards-Adults",
+		xlabel="Discount factor",
+		ylabel="Reward in initial state",
+		title="Expected Reward vs Discount factor",
+		legend=:topleft,
+		# size=(700, 400),
+		lw=3)
+	plot!(discount_factors, rewards, label="Rewards-Children", lw=3)
 end
 
-# ╔═╡ b4621b30-8e77-11eb-10ad-f1b91141776b
+# ╔═╡ a8dadff4-8ee0-11eb-24b2-579751feb9f2
+savefig(a, "task1b.png")
+
+# ╔═╡ cadb38a6-8ef9-11eb-3046-9b31b563dccf
 begin
-	plot(map(first, user_10), map(x -> x[2], user_10))
-	plot(map(first, user_20), map(x -> x[2], user_20))
-	plot(map(first, user_30), map(x -> x[2], user_30))
-	plot(map(first, user_40), map(x -> x[2], user_40))
+	ratios = [0.125, 0.25, 0.5, 1, 2, 4, 8]
+	users= [10,20,30,40,50]
+	values = [(0.125, 587.0),
+				(0.25, 489.0),
+				(0.5, 628.0),
+				(1.0, 697.0),
+				(2.0, 576.0),
+				(4.0, 710.0),
+				(8.0, 512.0),
+				(0.125, 4802.0), 
+				(0.25, 4488.0),
+				(0.5, 4575.0), 
+				(1.0, 4448.0), 
+				(2.0, 67515.0),
+				(4.0, 3193.0), 
+				(8.0, 3628.0), 
+				(0.125, 18754.0),
+				(0.25, 11994.0), 
+				(0.5, 10633.0),
+				(1.0, 9400.0), 
+				(2.0, 10361.0),
+				(4.0, 9660.0), 
+				(8.0, 7614.0), 
+				(0.125, 25117.0),
+				(0.25, 34713.0), 
+				(0.5, 26399.0),
+				(1.0, 23847.0),
+				(2.0, 1511125.0),
+				(4.0, 1378525.0),
+				(8.0, 18400.0),
+				(0.125, 642019.0),
+				(0.25, 49871.0), 
+				(0.5, 42097.0),
+				(1.0, 5960042.0),
+				(2.0, 42882.0),
+				(4.0, 634061.0), 
+				(8.0, 35440.0)
+	]
 end
+
+# ╔═╡ ca8a648a-8ef9-11eb-386e-9b8823868eb2
+begin
+	user_10= sort(values[1:7], by=first)
+	user_20= sort(values[8:14], by=first)
+	user_30= sort(values[15:21], by=first)
+	user_40= sort(values[22:28], by=first)
+	user_50= sort(values[29:35], by=first)
+	ratio_list = [user_10,
+user_20,
+user_30,
+user_40,
+user_50,]
+end
+
+# ╔═╡ e62aab46-8ef9-11eb-1835-c7c1b24228ea
+begin
+	ratio_map = Dict(string(ucount) => [] for ucount in users)
+	ratio_map["10"] = user_10
+	ratio_map["20"] = user_20
+	ratio_map["30"] = user_30
+	ratio_map["40"] = user_40
+	ratio_map["50"] = user_50
+	
+end
+
+# ╔═╡ 2e1123b2-8f05-11eb-1368-c79d421a9a56
+begin
+	x, y = map(first, user_10),   normalize(map(x -> x[2], user_10))
+	x1, y1 = map(first, user_20), normalize(map(x -> x[2], user_20))
+	x2, y2 = map(first, user_30), normalize(map(x -> x[2], user_30))
+	x3, y3 = map(first, user_40), normalize(map(x -> x[2], user_40))
+	x4, y4 = map(first, user_50), normalize(map(x -> x[2], user_50))
+end
+
+# ╔═╡ 47fc8a0e-8f06-11eb-2048-2903d976982f
+begin
+	all_runtimes = plot(x, y, lw=3, label="10 Users",
+		ylabel="Normalized Runtime", xlabel="Chidlren/Adults Ratio")
+	plot!(x1, y1, lw=3, label="20 Users")
+	plot!(x2, y2, lw=3, label="30 Users",)
+	plot!(x3, y3, lw=3, label="40 Users",)
+	plot!(x4, y4, lw=3, label="50 Users",)
+	
+end
+
+# ╔═╡ fdf740b2-8f09-11eb-1ac8-0d2a8c1eac1f
+savefig(all_runtimes, "task4.png")
 
 # ╔═╡ Cell order:
-# ╠═18b998ec-8db5-11eb-2ccc-c3c76268ca1d
-# ╠═1ebcccdc-8db5-11eb-3b90-c506fb4e319e
+# ╟─18b998ec-8db5-11eb-2ccc-c3c76268ca1d
+# ╠═61946106-8ee0-11eb-30b8-f7f84b884bf8
+# ╟─1ebcccdc-8db5-11eb-3b90-c506fb4e319e
 # ╟─2653b424-8db5-11eb-3d6e-271089a057f0
 # ╟─75a90448-8db5-11eb-1305-2b8a0a227a57
-# ╠═85203374-8db5-11eb-1838-934229976d52
-# ╠═d385eca2-8db5-11eb-39ea-bb24d60ea741
-# ╠═400278c8-8db6-11eb-3a7e-692ae5a8eca5
-# ╠═ddf5ab28-8e73-11eb-3409-afdf35e4ff45
-# ╠═27310094-8e74-11eb-3648-ed288fd414ec
-# ╠═72b1d2f2-8e77-11eb-0924-ffc7329b8970
-# ╠═b4621b30-8e77-11eb-10ad-f1b91141776b
+# ╟─ddf5ab28-8e73-11eb-3409-afdf35e4ff45
+# ╟─33195372-8ee0-11eb-1df4-b36ac35ba443
+# ╟─42b6ebbe-8ee0-11eb-2de0-a10da3fe5e30
+# ╠═a8dadff4-8ee0-11eb-24b2-579751feb9f2
+# ╠═47fc8a0e-8f06-11eb-2048-2903d976982f
+# ╠═fdf740b2-8f09-11eb-1ac8-0d2a8c1eac1f
+# ╟─cadb38a6-8ef9-11eb-3046-9b31b563dccf
+# ╟─ca8a648a-8ef9-11eb-386e-9b8823868eb2
+# ╟─e62aab46-8ef9-11eb-1835-c7c1b24228ea
+# ╟─2e1123b2-8f05-11eb-1368-c79d421a9a56
